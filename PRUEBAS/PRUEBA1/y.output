@@ -1,0 +1,155 @@
+Estado 10 conflictos: 2 desplazamiento/reducción
+Estado 11 conflictos: 2 desplazamiento/reducción
+
+
+Gramática
+
+    0 $accept: inicio $end
+
+    1 inicio: NOMBRE '=' E
+    2       | E
+
+    3 E: E '+' E
+    4  | E '-' E
+    5  | NUMERO
+
+
+Terminales con las reglas donde aparecen
+
+    $end (0) 0
+    '+' (43) 3
+    '-' (45) 4
+    '=' (61) 1
+    error (256)
+    NOMBRE (258) 1
+    NUMERO (259) 5
+
+
+No terminales con las reglas donde aparecen
+
+    $accept (8)
+        on left: 0
+    inicio (9)
+        on left: 1 2
+        on right: 0
+    E (10)
+        on left: 3 4 5
+        on right: 1 2 3 4
+
+
+Estado 0
+
+    0 $accept: . inicio $end
+
+    NOMBRE  desplazar e ir al estado 1
+    NUMERO  desplazar e ir al estado 2
+
+    inicio  ir al estado 3
+    E       ir al estado 4
+
+
+Estado 1
+
+    1 inicio: NOMBRE . '=' E
+
+    '='  desplazar e ir al estado 5
+
+
+Estado 2
+
+    5 E: NUMERO .
+
+    $default  reduce usando la regla 5 (E)
+
+
+Estado 3
+
+    0 $accept: inicio . $end
+
+    $end  desplazar e ir al estado 6
+
+
+Estado 4
+
+    2 inicio: E .
+    3 E: E . '+' E
+    4  | E . '-' E
+
+    '+'  desplazar e ir al estado 7
+    '-'  desplazar e ir al estado 8
+
+    $default  reduce usando la regla 2 (inicio)
+
+
+Estado 5
+
+    1 inicio: NOMBRE '=' . E
+
+    NUMERO  desplazar e ir al estado 2
+
+    E  ir al estado 9
+
+
+Estado 6
+
+    0 $accept: inicio $end .
+
+    $default  aceptar
+
+
+Estado 7
+
+    3 E: E '+' . E
+
+    NUMERO  desplazar e ir al estado 2
+
+    E  ir al estado 10
+
+
+Estado 8
+
+    4 E: E '-' . E
+
+    NUMERO  desplazar e ir al estado 2
+
+    E  ir al estado 11
+
+
+Estado 9
+
+    1 inicio: NOMBRE '=' E .
+    3 E: E . '+' E
+    4  | E . '-' E
+
+    '+'  desplazar e ir al estado 7
+    '-'  desplazar e ir al estado 8
+
+    $default  reduce usando la regla 1 (inicio)
+
+
+Estado 10
+
+    3 E: E . '+' E
+    3  | E '+' E .
+    4  | E . '-' E
+
+    '+'  desplazar e ir al estado 7
+    '-'  desplazar e ir al estado 8
+
+    '+'       [reduce usando la regla 3 (E)]
+    '-'       [reduce usando la regla 3 (E)]
+    $default  reduce usando la regla 3 (E)
+
+
+Estado 11
+
+    3 E: E . '+' E
+    4  | E . '-' E
+    4  | E '-' E .
+
+    '+'  desplazar e ir al estado 7
+    '-'  desplazar e ir al estado 8
+
+    '+'       [reduce usando la regla 4 (E)]
+    '-'       [reduce usando la regla 4 (E)]
+    $default  reduce usando la regla 4 (E)
