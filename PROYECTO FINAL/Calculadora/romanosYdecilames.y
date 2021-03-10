@@ -5,6 +5,8 @@
 extern int yylex(void);
 extern char *yytext;
 extern int nlines;
+extern void decimalesAromanos(int numero,char* buffer);
+extern char * nRomano[20];
 extern FILE *yyin;
 void yyerror(char *s);
 %}
@@ -38,9 +40,9 @@ void yyerror(char *s);
 %right TKN_Potencia TKN_SQRT
 %right TKN_CBRT
 %%
-Calculadora: Expresion {printf("El  resultado en decimal es: ");}
-	TKN_PTOCOMA {printf("%5.2f\n", $1);};
-
+Calculadora: Expresion {printf("El  resultado en decimal es: ");
+decimalesAromanos($1,nRomano);}
+	TKN_PTOCOMA {printf("%5.2f\n El resultado en Romano es:%s\n", $1,nRomano);};
 Expresion:	TKN_NUM {$$=$1;} |
 	Expresion TKN_MAS Expresion	{$$=$1+$3;} |
 	Expresion TKN_MENOS Expresion	{$$=$1-$3;} |
@@ -59,6 +61,7 @@ void yyerror(char *s){
 	printf("Error %s", s);
 }
 int main (int argc, char **argv){
+printf("Ingrese una expresion aritmetica(sistemas de numeración válidos:ROMANOS, DECIMALES:)\n");
 	if (argc>1){
 		yyin=fopen(argv[1], "rt");
 	}else{
